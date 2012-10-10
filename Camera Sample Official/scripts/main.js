@@ -17,12 +17,11 @@ function onDeviceReady() {
 	id("capturePhotoEditButton").addEventListener("click", capturePhotoEdit);
 	id("getPhotoFromLibraryButton").addEventListener("click", getPhotoFromLibrary);
 	id("getPhotoFromAlbumButton").addEventListener("click", getPhotoFromAlbum);
-	id("cleanUp").adaddEventListener("click", cleanUpPhotoes);
 }
 
 function onPhotoDataSuccess(imageData) {
-    var smallImage = id('smallImage');
-    var largeImage = id('largeImage');
+    var smallImage = id('smallImage'),
+    largeImage = id('largeImage');
     largeImage.style.display = 'none';
     smallImage.style.display = 'block';
 
@@ -31,8 +30,8 @@ function onPhotoDataSuccess(imageData) {
 }
 
 function onPhotoURISuccess(imageURI) {
-    var smallImage = id('smallImage');
-    var largeImage = id('largeImage');
+    var smallImage = id('smallImage'),
+    largeImage = id('largeImage');
     largeImage.style.display = 'block';
     smallImage.style.display = 'none';
      

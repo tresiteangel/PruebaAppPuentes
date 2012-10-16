@@ -6,77 +6,85 @@ function id(element) {
     return document.getElementById(element);
 }
 
-var pictureSource;
-var destinationType;
-
 function onDeviceReady() {
-	// Set up enumerations to save typing.
-	pictureSource = navigator.camera.PictureSourceType;
-	destinationType = navigator.camera.DestinationType;
-	id("capturePhotoButton").addEventListener("click", capturePhoto);
-	id("capturePhotoEditButton").addEventListener("click", capturePhotoEdit);
-	id("getPhotoFromLibraryButton").addEventListener("click", getPhotoFromLibrary);
-	id("getPhotoFromAlbumButton").addEventListener("click", getPhotoFromAlbum);
+	cameraApp = new cameraApp();
+    cameraApp.run();
 }
 
-function onPhotoDataSuccess(imageData) {
-    var smallImage = id('smallImage'),
-    largeImage = id('largeImage');
-    largeImage.style.display = 'none';
-    smallImage.style.display = 'block';
 
-    // Show the captured photo.
-    smallImage.src = "data:image/jpeg;base64," + imageData;
-}
 
-function onPhotoURISuccess(imageURI) {
-    var smallImage = id('smallImage'),
-    largeImage = id('largeImage');
-    largeImage.style.display = 'block';
-    smallImage.style.display = 'none';
-     
-    // Show the captured photo.
-    largeImage.src = imageURI;
-}
+function cameraApp(){}
 
-function capturePhoto() {
-    // Take picture using device camera and retrieve image as base64-encoded string.
-    navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
-        quality: 50,
-        destinationType: destinationType.DATA_URL
-    });
-}
-
-function capturePhotoEdit() {
-    // Take picture using device camera, allow edit, and retrieve image as base64-encoded string. 
-    // The allowEdit property has no effect on Android devices.
-    navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
-        quality: 20, allowEdit: true,
-        destinationType: destinationType.DATA_URL
-    });
-}
-
-function getPhotoFromLibrary() {
-    // On Android devices, pictureSource.PHOTOLIBRARY and
-    // pictureSource.SAVEDPHOTOALBUM display the same photo album.
-    getPhoto(pictureSource.PHOTOLIBRARY);         
-}
- 
-function getPhotoFromAlbum() {
-    // On Android devices, pictureSource.PHOTOLIBRARY and
-    // pictureSource.SAVEDPHOTOALBUM display the same photo album.
-    getPhoto(pictureSource.SAVEDPHOTOALBUM)
-}
-
-function getPhoto(source) {
-    // Retrieve image file location from specified source.
-    navigator.camera.getPicture(onPhotoURISuccess, onFail, {
-        quality: 50,
-        destinationType: destinationType.FILE_URI,
-        sourceType: source
-    });
-}
-
-function onFail(message) {
-    alert('Failed! Error: ' + message);
+cameraApp.prototype={
+    _pictureSource:null,
+    
+    _destinationType:null,
+    
+    run:function(){
+        var that=this;
+	    that._pictureSource = navigator.camera.PictureSourceType;
+	    that._destinationType = navigator.camera.DestinationType;
+	    id("capturePhotoButton").addEventListener("click", that._capturePhoto);
+	    id("capturePhotoEditButton").addEventListener("click", that._capturePhotoEdit);
+	    id("getPhotoFromLibraryButton").addEventListener("click", that._getPhotoFromLibrary);
+	    id("getPhotoFromAlbumButton").addEventListener("click", that._getPhotoFromAlbum);
+    },
+    
+    _capturePhoto:function() {
+        // Take picture using device camera and retrieve image as base64-encoded string.
+        navigator.camera.getPicture(cameraApp._onPhotoDataSuccess, cameraApp._onFail, {
+            quality: 50,
+            destinationType: cameraApp._destinationType.DATA_URL
+        });
+    },
+    
+    _capturePhotoEdit:function() {
+        // Take picture using device camera, allow edit, and retrieve image as base64-encoded string. 
+        // The allowEdit property has no effect on Android devices.
+        navigator.camera.getPicture(cameraApp._onPhotoDataSuccess, cameraApp._onFail, {
+            quality: 20, allowEdit: true,
+            destinationType: cameraApp._destinationType.DATA_URL
+        });
+    },
+    
+    _getPhotoFromLibrary:function() {
+        // On Android devices, pictureSource.PHOTOLIBRARY and
+        // pictureSource.SAVEDPHOTOALBUM display the same photo album.
+        cameraApp._getPhoto(cameraApp._pictureSource.PHOTOLIBRARY);         
+    },
+    
+    _getPhotoFromAlbum:function() {
+        // On Android devices, pictureSource.PHOTOLIBRARY and
+        // pictureSource.SAVEDPHOTOALBUM display the same photo album.
+        cameraApp._getPhoto(cameraApp._pictureSource.SAVEDPHOTOALBUM)
+    },
+    
+    _getPhoto:function(source) {
+        // Retrieve image file location from specified source.
+        navigator.camera.getPicture(cameraApp._onPhotoURISuccess, cameraApp._onFail, {
+            quality: 50,
+            destinationType: cameraApp._destinationType.FILE_URI,
+            sourceType: source
+        });
+    },
+    
+    _onPhotoDataSuccess:function(imageData) {
+        var smallImage = document.getElementById('smallImage');
+        smallImage.style.display = 'block';
+    
+        // Show the captured photo.
+        smallImage.src = "data:image/jpeg;base64," + imageData;
+    },
+    
+    _onPhotoURISuccess:function(imageURI) {
+        var smallImage = document.getElementById('smallImage');
+        smallImage.style.display = 'block';
+         
+        // Show the captured photo.
+        smallImage.src = imageURI;
+    },
+    
+    _onFail:function(message) {
+        alert('Failed! Error: ' + message);
+    }
 }

@@ -16,59 +16,85 @@ function onDeviceReady() {
 function cameraApp(){}
 
 cameraApp.prototype={
-    _pictureSource:null,
+    _pictureSource: null,
     
-    _destinationType:null,
+    _destinationType: null,
     
-    run:function(){
+    run: function(){
         var that=this;
 	    that._pictureSource = navigator.camera.PictureSourceType;
 	    that._destinationType = navigator.camera.DestinationType;
-	    id("capturePhotoButton").addEventListener("click", that._capturePhoto);
-	    id("capturePhotoEditButton").addEventListener("click", that._capturePhotoEdit);
-	    id("getPhotoFromLibraryButton").addEventListener("click", that._getPhotoFromLibrary);
-	    id("getPhotoFromAlbumButton").addEventListener("click", that._getPhotoFromAlbum);
-    },
-    
-    _capturePhoto:function() {
-        // Take picture using device camera and retrieve image as base64-encoded string.
-        navigator.camera.getPicture(cameraApp._onPhotoDataSuccess, cameraApp._onFail, {
-            quality: 50,
-            destinationType: cameraApp._destinationType.DATA_URL
+	    id("capturePhotoButton").addEventListener("click", function(){
+            that._capturePhoto.apply(that,arguments);
+        });
+	    id("capturePhotoEditButton").addEventListener("click", function(){
+            that._capturePhotoEdit.apply(that,arguments)
+        });
+	    id("getPhotoFromLibraryButton").addEventListener("click", function(){
+            that._getPhotoFromLibrary.apply(that,arguments)
+        });
+	    id("getPhotoFromAlbumButton").addEventListener("click", function(){
+            that._getPhotoFromAlbum.apply(that,arguments);
         });
     },
     
-    _capturePhotoEdit:function() {
+    _capturePhoto: function() {
+        var that = this;
+        
+        // Take picture using device camera and retrieve image as base64-encoded string.
+        navigator.camera.getPicture(function(){
+            that._onPhotoDataSuccess.apply(that,arguments);
+        },function(){
+            that._onFail.apply(that,arguments);
+        },{
+            quality: 50,
+            destinationType: that._destinationType.DATA_URL
+        });
+    },
+    
+    _capturePhotoEdit: function() {
+        var that = this;
         // Take picture using device camera, allow edit, and retrieve image as base64-encoded string. 
         // The allowEdit property has no effect on Android devices.
-        navigator.camera.getPicture(cameraApp._onPhotoDataSuccess, cameraApp._onFail, {
+        navigator.camera.getPicture(function(){
+            that._onPhotoDataSuccess.apply(that,arguments);
+        }, function(){
+            that._onFail.apply(that,arguments);
+        }, {
             quality: 20, allowEdit: true,
             destinationType: cameraApp._destinationType.DATA_URL
         });
     },
     
-    _getPhotoFromLibrary:function() {
+    _getPhotoFromLibrary: function() {
+        var that= this;
         // On Android devices, pictureSource.PHOTOLIBRARY and
         // pictureSource.SAVEDPHOTOALBUM display the same photo album.
-        cameraApp._getPhoto(cameraApp._pictureSource.PHOTOLIBRARY);         
+        that._getPhoto(that._pictureSource.PHOTOLIBRARY);         
     },
     
-    _getPhotoFromAlbum:function() {
+    _getPhotoFromAlbum: function() {
+        var that= this;
         // On Android devices, pictureSource.PHOTOLIBRARY and
         // pictureSource.SAVEDPHOTOALBUM display the same photo album.
-        cameraApp._getPhoto(cameraApp._pictureSource.SAVEDPHOTOALBUM)
+        that._getPhoto(that._pictureSource.SAVEDPHOTOALBUM)
     },
     
-    _getPhoto:function(source) {
+    _getPhoto: function(source) {
+        var that = this;
         // Retrieve image file location from specified source.
-        navigator.camera.getPicture(cameraApp._onPhotoURISuccess, cameraApp._onFail, {
+        navigator.camera.getPicture(function(){
+            that._onPhotoURISuccess.apply(that,arguments);
+        }, function(){
+            cameraApp._onFail.apply(that,arguments);
+        }, {
             quality: 50,
             destinationType: cameraApp._destinationType.FILE_URI,
             sourceType: source
         });
     },
     
-    _onPhotoDataSuccess:function(imageData) {
+    _onPhotoDataSuccess: function(imageData) {
         var smallImage = document.getElementById('smallImage');
         smallImage.style.display = 'block';
     
@@ -76,7 +102,7 @@ cameraApp.prototype={
         smallImage.src = "data:image/jpeg;base64," + imageData;
     },
     
-    _onPhotoURISuccess:function(imageURI) {
+    _onPhotoURISuccess: function(imageURI) {
         var smallImage = document.getElementById('smallImage');
         smallImage.style.display = 'block';
          
@@ -84,7 +110,7 @@ cameraApp.prototype={
         smallImage.src = imageURI;
     },
     
-    _onFail:function(message) {
+    _onFail: function(message) {
         alert('Failed! Error: ' + message);
     }
 }

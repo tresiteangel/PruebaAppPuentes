@@ -47,5 +47,6 @@
     "ID_RESOLUTION_HD720P"
   ],
   "Author": "",
-  "Description": "Camera Sample"
+  "Description": "Camera Sample",
+  "Framework": "Cordova"
 }

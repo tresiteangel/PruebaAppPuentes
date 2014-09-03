@@ -9,6 +9,8 @@ function id(element) {
 function onDeviceReady() {
 	cameraApp = new cameraApp();
     cameraApp.run();
+
+    navigator.splashscreen.hide();
 }
 
 

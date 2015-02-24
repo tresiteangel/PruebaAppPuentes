@@ -46,7 +46,5 @@
 	"Author": "",
 	"Description": "Camera Sample",
 	"Framework": "Cordova",
-	"projectVersion": 1,
-	"WP8PublisherID": "{41377eb2-1edf-4f71-98ae-23b2630e8958}",
-	"WP8ProductID": "{7bbcbc60-d630-4ed1-a432-5cbe2173e195}"
+	"projectVersion": 1
 }

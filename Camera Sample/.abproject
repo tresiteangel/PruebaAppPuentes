@@ -37,13 +37,18 @@
 		"org.apache.cordova.device",
 		"org.apache.cordova.splashscreen"
 	],
-	"DisplayName": "Camera Sample",
+	"DisplayName": "Camera",
 	"WP8SupportedResolutions": [
 		"ID_RESOLUTION_WVGA",
 		"ID_RESOLUTION_WXGA",
 		"ID_RESOLUTION_HD720P"
 	],
 	"Author": "",
+	"WP8Publisher": "",
+	"WP8TileTitle": "",
+	"WP8Capabilities": [],
+	"iOSBackgroundMode": [],
+	"WP8Requirements": [],
 	"Description": "Camera Sample",
 	"Framework": "Cordova",
 	"projectVersion": 1
